@@ -1,0 +1,6 @@
+logging:
+  level:
+    ROOT: INFO
+    com.hazelcast: INFO
+  
+management.security.enabled: false
