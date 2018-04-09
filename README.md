@@ -9,7 +9,13 @@ cd eureka
 mvn spring-boot:run
 
 cd hazelcast-node
-mvn spring-boot:run (repeat at least two times)
+mvn spring-boot:run -Dserver.port=8181
+
+cd hazelcast-node
+mvn spring-boot:run -Dserver.port=8182
 ```
 
 Eureka registry: http://localhost:8761/eureka/apps (see metadata map)
+
+Node 1 health: http://localhost:8181/health (see hazelcast.nodesCount)
+Node 2 health: http://localhost:8182/health
