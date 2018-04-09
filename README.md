@@ -11,3 +11,5 @@ mvn spring-boot:run
 cd hazelcast-node
 mvn spring-boot:run (repeat at least two times)
 ```
+
+Eureka registry: http://localhost:8761/eureka/apps (see metadata map)
