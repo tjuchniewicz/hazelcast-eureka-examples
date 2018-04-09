@@ -18,4 +18,5 @@ mvn spring-boot:run -Dserver.port=8282
 Eureka registry: http://localhost:8761/eureka/apps (see metadata map)
 
 Node 1 health: http://localhost:8181/health (see hazelcast.nodesCount)
+
 Node 2 health: http://localhost:8282/health
