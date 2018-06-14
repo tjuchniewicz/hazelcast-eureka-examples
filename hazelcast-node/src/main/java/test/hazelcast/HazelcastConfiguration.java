@@ -30,11 +30,13 @@ public class HazelcastConfiguration {
 		HazelcastInstance instance = new HazelcastInstanceFactory(configLocation).getHazelcastInstance();
 		int port = instance.getCluster().getLocalMember().getAddress().getPort();
 		String host = instance.getCluster().getLocalMember().getAddress().getHost();
+		String groupName = instance.getConfig().getGroupConfig().getName());
 		
 		// provide Hazelcast info in Eureka metadata
 		Map<String, String> map = ApplicationInfoManager.getInstance().getInfo().getMetadata();
 		map.put("hazelcast.port", Integer.toString(port));
 		map.put("hazelcast.host", host);
+		map.put("hazelcast.groupName", groupName);
 		
 		return instance;
 	}
