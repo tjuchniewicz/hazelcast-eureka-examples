@@ -7,15 +7,20 @@ import org.springframework.stereotype.Component;
 
 import com.hazelcast.core.HazelcastInstance;
 
+/**
+ * Simple Hazelcast health indicator for Spring Boot.
+ * 
+ * @author tjuchniewicz
+ *
+ */
 @Component
 public class HazelcastHealthIndicator implements HealthIndicator {
 
 	@Autowired
 	HazelcastInstance hazelcast;
-	
+
 	@Override
 	public Health health() {
 		return Health.up().withDetail("nodesCount", hazelcast.getCluster().getMembers().size()).build();
 	}
 }
-

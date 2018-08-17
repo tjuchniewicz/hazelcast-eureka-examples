@@ -1,43 +1,39 @@
 package test.hazelcast;
 
 import java.io.IOException;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.hazelcast.HazelcastInstanceFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.config.Config;
+import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.eureka.one.EurekaOneDiscoveryStrategyFactory;
-import com.netflix.appinfo.ApplicationInfoManager;
 import com.netflix.discovery.EurekaClient;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Configuration
+@Slf4j
 public class HazelcastConfiguration {
 
 	@Autowired
-	EurekaClient eurekaClient;
+	private EurekaClient eurekaClient;
 	
 	@Bean
-	HazelcastInstance hazelcast() throws IOException {
+	Config hazelcastConfig() throws IOException {
+		
+		log.info("Creating Hazelcast configuration");
+		Resource configLocation = new ClassPathResource("hazelcast-eureka.xml");
+		Config config = new XmlConfigBuilder(configLocation.getInputStream()).build();
+		
+		log.info("Eureka instance status: {}", eurekaClient.getApplicationInfoManager().getInfo().getStatus());
 		
 		EurekaOneDiscoveryStrategyFactory.setEurekaClient(eurekaClient);
+		EurekaOneDiscoveryStrategyFactory.setGroupName(config.getGroupConfig().getName());
 		
-		Resource configLocation = new ClassPathResource("hazelcast.xml");
-		HazelcastInstance instance = new HazelcastInstanceFactory(configLocation).getHazelcastInstance();
-		int port = instance.getCluster().getLocalMember().getAddress().getPort();
-		String host = instance.getCluster().getLocalMember().getAddress().getHost();
-		String groupName = instance.getConfig().getGroupConfig().getName();
-		
-		// provide Hazelcast info in Eureka metadata
-		Map<String, String> map = ApplicationInfoManager.getInstance().getInfo().getMetadata();
-		map.put("hazelcast.port", Integer.toString(port));
-		map.put("hazelcast.host", host);
-		map.put("hazelcast.groupName", groupName);
-		
-		return instance;
+		return config;
 	}
 }
