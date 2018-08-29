@@ -48,7 +48,7 @@
             <discovery-strategies>
                 <discovery-strategy class="com.hazelcast.eureka.one.EurekaOneDiscoveryStrategy" enabled="true">
                     <properties>
-                       <property name="self-registration">true</property>
+                       <property name="self-registration">false</property>
                        <property name="use-metadata-for-host-and-port">true</property>
                        <property name="namespace">hazelcast</property>
                     </properties>
